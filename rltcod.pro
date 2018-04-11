@@ -4,13 +4,11 @@ QT -= gui
 TARGET = rltcod
 CONFIG += console
 CONFIG -= app_bundle
+CONFIG += c++14
 
 TEMPLATE = app
 
-SOURCES += main.cpp \
-    src/actor.cpp \
-    src/gamemap.cpp \
-    gameengine.cpp
+SOURCES += main.cpp
 
 HEADERS += \
     include/bresenham.h \
@@ -59,10 +57,7 @@ HEADERS += \
     include/txtfield.hpp \
     include/wrappers.h \
     include/zip.h \
-    include/zip.hpp \
-    src/actor.h \
-    src/gamemap.h \
-    gameengine.h
+    include/zip.hpp
 
 DISTFILES += \
     terminal.png \
