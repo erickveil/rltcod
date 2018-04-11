@@ -6,9 +6,24 @@
 
 int main(int argc, char *argv[])
 {
+    /* NOTES:
+     * So far, each "tile" is:
+     * A data indicator referenced by the map (enum)
+     * A character that gets printed to the screen
+     * A foreground color
+     * A background color (sometimes clear)
+     * TCODConsole::putCharEx does all at once
+     *
+     * Procedure to draw the world is:
+     * 1. iterate each layer, from bottom to top.
+     * 2. draw the character and set the colors on each space based on the data
+     *
+     * Next:
+     * Figure out if we can zoom in on these little tiles.
+     */
     qDebug() << "Hello World.";
 
-    // The possible gournd types
+    // The possible ground cover types
     enum GroundCover { Dirt, Grass };
 
     // The zone
@@ -63,9 +78,13 @@ int main(int argc, char *argv[])
                 TCODConsole::root->setCharForeground(y, x, groundCoverFgColor);
             }
         }
+
+        // draw the player
+        TCODConsole::root->putChar(5, 5, '@');
+        TCODConsole::root->setCharForeground(5, 5, TCODColor::white);
+
         TCODConsole::flush();
     }
-
     return 0;
 }
 
