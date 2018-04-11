@@ -69,9 +69,13 @@ DISTFILES += \
 
 DEPENDPATH += "/home/anon/src/rltcod/include"
 DEPENDPATH += "/home/anon/src/rltcod/lib"
+
 INCLUDEPATH += "/home/anon/src/rltcod/include"
 INCLUDEPATH += "/home/anon/src/rltcod/lib"
+
 LIBS += -L"/home/anon/src/rltcod/lib" -ltcod
-LIBS += -L"/home/anon/src/rltcod/lib" -ltcod_debug
-LIBS += -L"/home/anon/src/rltcod/lib" -ltcodxx_debug
+LIBS += -L"/home/anon/src/rltcod/lib" -ltcodxx
+LIBS += -L"/home/anon/src/rltcod/lib" -ltcodgui
+#LIBS += -L"/home/anon/src/rltcod/lib" -ltcod_debug
+#LIBS += -L"/home/anon/src/rltcod/lib" -ltcodxx_debug
 

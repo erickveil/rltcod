@@ -1,6 +1,6 @@
 /*
-* libtcod 1.5.1
-* Copyright (c) 2008,2009,2010,2012 Jice & Mingos
+* libtcod 1.6.4
+* Copyright (c) 2008,2009,2010,2012,2013,2016,2017 Jice & Mingos & rmtew
 * All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
@@ -13,10 +13,10 @@
 *     * The name of Jice or Mingos may not be used to endorse or promote products
 *       derived from this software without specific prior written permission.
 *
-* THIS SOFTWARE IS PROVIDED BY JICE AND MINGOS ``AS IS'' AND ANY
+* THIS SOFTWARE IS PROVIDED BY JICE, MINGOS AND RMTEW ``AS IS'' AND ANY
 * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-* DISCLAIMED. IN NO EVENT SHALL JICE OR MINGOS BE LIABLE FOR ANY
+* DISCLAIMED. IN NO EVENT SHALL JICE, MINGOS OR RMTEW BE LIABLE FOR ANY
 * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
 * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
 * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
@@ -29,13 +29,19 @@
 #define _TCOD_TEXT_HPP_
 
 #include "color.hpp"
+#include "console.hpp"
+#include "txtfield.h"
+
+#ifdef TCOD_CONSOLE_SUPPORT
 
 class TCODLIB_API TCODText {
 public :
 	TCODText(int x, int y, int w, int h, int max_chars);
+	TCODText(int w, int h, int max_chars);
 	~TCODText();
 	void setProperties(int cursor_char, int blink_interval, const char * prompt, int tab_size);
 	void setColors(TCODColor fore, TCODColor back, float back_transparency);
+	void setPos(int x, int y);
 	bool update(TCOD_key_t key);
 	void render(TCODConsole * con);
 	const char *getText();
@@ -44,5 +50,6 @@ protected :
 	TCOD_text_t data;
 };
 
+#endif /* TCOD_CONSOLE_SUPPORT */
 
 #endif
