@@ -56,23 +56,22 @@ int main(int argc, char *argv[])
     qDebug() << "Screen resolution: " << QString::number(screenWidth) << " x "
              << QString::number(screenHeight);
 
-    // Get font size
-    int charWidth;
-    int charHeight;
-    TCODSystem::getCharSize(&charWidth, &charHeight);
-    qDebug() << "Character size: " << QString::number(charWidth) << " x "
-             << QString::number(charHeight);
-
     // Set larger font:
     /* See Brogue source file "tcod-platform.c" loadFont(); function for
      * dynamic font selection.
      * This font is much larger and clearer than the default terminal.png file.
      */
     TCOD_console_set_custom_font(
-                "font-13.png",
+                "terminal16x16_gs_ro.png",
                 (TCOD_FONT_TYPE_GRAYSCALE | TCOD_FONT_LAYOUT_ASCII_INROW),
                 0, 0);
 
+    // Get font size
+    int charWidth;
+    int charHeight;
+    TCODSystem::getCharSize(&charWidth, &charHeight);
+    qDebug() << "Character size: " << QString::number(charWidth) << " x "
+             << QString::number(charHeight);
 
     // draw the zone
     TCODConsole::initRoot(10, 10, "RL Tcod", false);
@@ -108,8 +107,28 @@ int main(int argc, char *argv[])
         TCODConsole::root->putChar(5, 5, '@');
         TCODConsole::root->setCharForeground(5, 5, TCODColor::white);
 
+         // draw outside the zone
+        TCODConsole::root->putChar(5, 11, '!');
+
+/*
+    int insideChar = TCODConsole::root->getChar(5, 5);
+    qDebug() << "inside char: " << (char)insideChar;
+    int outsideChar = TCODConsole::root->getChar(5, 11);
+    qDebug() << "outside char: " << QString::number(outsideChar);
+*/
+
+        // Add the tree file
+        //TCODConsole *treeImage = new TCODConsole("tree.apf");
+        TCODConsole *treeImage = new TCODConsole(5,5);
+        treeImage->clear();
+        treeImage->loadApf("tree.apf");
+        TCODConsole::blit(treeImage, 0, 0, 5, 5, TCODConsole::root, 0, 0, 1.0f,
+                          1.0f);
+
+
         TCODConsole::flush();
     }
     return 0;
+
 }
 
