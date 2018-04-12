@@ -49,6 +49,31 @@ int main(int argc, char *argv[])
     zone[5][3] = Grass;
     zone[5][4] = Grass;
 
+    // get the current screen resolution
+    int screenWidth;
+    int screenHeight;
+    TCODSystem::getCurrentResolution(&screenWidth, &screenHeight);
+    qDebug() << "Screen resolution: " << QString::number(screenWidth) << " x "
+             << QString::number(screenHeight);
+
+    // Get font size
+    int charWidth;
+    int charHeight;
+    TCODSystem::getCharSize(&charWidth, &charHeight);
+    qDebug() << "Character size: " << QString::number(charWidth) << " x "
+             << QString::number(charHeight);
+
+    // Set larger font:
+    /* See Brogue source file "tcod-platform.c" loadFont(); function for
+     * dynamic font selection.
+     * This font is much larger and clearer than the default terminal.png file.
+     */
+    TCOD_console_set_custom_font(
+                "font-13.png",
+                (TCOD_FONT_TYPE_GRAYSCALE | TCOD_FONT_LAYOUT_ASCII_INROW),
+                0, 0);
+
+
     // draw the zone
     TCODConsole::initRoot(10, 10, "RL Tcod", false);
     while (!TCODConsole::isWindowClosed()) {
