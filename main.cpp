@@ -4,6 +4,9 @@
 #include <QDebug>
 #include <QList>
 
+void logOnce(QString msg);
+void importApf(QString filename, int x, int y);
+
 int main(int argc, char *argv[])
 {
     /* NOTES:
@@ -76,6 +79,7 @@ int main(int argc, char *argv[])
     // draw the zone
     TCODConsole::initRoot(10, 10, "RL Tcod", false);
     while (!TCODConsole::isWindowClosed()) {
+        QString msg;
 
         TCOD_key_t key;
         TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS, &key, NULL);
@@ -110,25 +114,41 @@ int main(int argc, char *argv[])
          // draw outside the zone
         TCODConsole::root->putChar(5, 11, '!');
 
-/*
-    int insideChar = TCODConsole::root->getChar(5, 5);
-    qDebug() << "inside char: " << (char)insideChar;
-    int outsideChar = TCODConsole::root->getChar(5, 11);
-    qDebug() << "outside char: " << QString::number(outsideChar);
-*/
+        importApf("tree.apf", 1, 2);
 
-        // Add the tree file
-        //TCODConsole *treeImage = new TCODConsole("tree.apf");
-        TCODConsole *treeImage = new TCODConsole(5,5);
-        treeImage->clear();
-        treeImage->loadApf("tree.apf");
-        TCODConsole::blit(treeImage, 0, 0, 5, 5, TCODConsole::root, 0, 0, 1.0f,
-                          1.0f);
+        int posx = 0;
+        int posy = 0;
 
+        // log the magenta color:
+        int queryChar = TCODConsole::root->getChar(posx,posy);
 
         TCODConsole::flush();
+        logOnce(msg);
     }
     return 0;
 
 }
+
+void importApf(QString filename, int x, int y)
+{
+    TCODConsole *importBuffer = new TCODConsole(1,1);
+    importBuffer->clear();
+    importBuffer->loadApf(filename.toLocal8Bit());
+    const int SOURCE_SIZE = 0;
+    const int SOURCE_ORIGIN = 0;
+    TCODColor keyBackgroundColor(300.0f, 1.0f, 1.0f);
+    importBuffer->setKeyColor(keyBackgroundColor);
+    TCODConsole::blit(importBuffer,
+                      SOURCE_ORIGIN, SOURCE_ORIGIN,
+                      SOURCE_SIZE, SOURCE_SIZE,
+                      TCODConsole::root, x, y);
+}
+
+bool hasLogged = false;
+void logOnce(QString msg) {
+    if (hasLogged) { return; }
+    qDebug() << msg;
+    hasLogged = true;
+}
+
 
