@@ -114,7 +114,7 @@ int main(int argc, char *argv[])
          // draw outside the zone
         TCODConsole::root->putChar(5, 11, '!');
 
-        importApf("tree.apf", 1, 2);
+        importApf("tree.apf", 7, 2);
 
         int posx = 0;
         int posy = 0;
@@ -129,6 +129,15 @@ int main(int argc, char *argv[])
 
 }
 
+/**
+ * @brief importApf
+ * Imports an apf file to the main console at x and y.
+ * Clears any transparent tiles on the imported image.
+ *
+ * @param filename The file path of the saved apf file
+ * @param x
+ * @param y
+ */
 void importApf(QString filename, int x, int y)
 {
     TCODConsole *importBuffer = new TCODConsole(1,1);
