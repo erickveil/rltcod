@@ -8,7 +8,9 @@ CONFIG += c++14
 
 TEMPLATE = app
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    intergalacticcloud.cpp \
+    galacticcluster.cpp
 
 HEADERS += \
     include/bresenham.h \
@@ -57,7 +59,9 @@ HEADERS += \
     include/txtfield.hpp \
     include/wrappers.h \
     include/zip.h \
-    include/zip.hpp
+    include/zip.hpp \
+    intergalacticcloud.h \
+    galacticcluster.h
 
 DISTFILES += \
     terminal.png \

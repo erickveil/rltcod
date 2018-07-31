@@ -4,6 +4,9 @@
 #include <QDebug>
 #include <QList>
 
+
+#include "intergalacticcloud.h"
+
 int main(int argc, char *argv[])
 {
     /* NOTES:
@@ -20,7 +23,22 @@ int main(int argc, char *argv[])
      *
      * Next:
      * Figure out if we can zoom in on these little tiles.
+     *
+     * Region Levels
+     * =============
+     * Intergalactic Cloud	Perlin with radial gradient
+     * Galactic Cluster		Square of IC containing perlin distribution of galaxies based on IC coordinates and density
+     * Galaxy				Perlin modified by galaxy shape
+     * Star Sector			Square of Galaxy containing perlin distribution of stars based on galaxy coordinates and density
+     * Star System			Star(s) centered with orbiting bodies
+     * Planet System		Planet with satelite orbiting bodies
+     * Planetoid Map		Pseudo-spehere map with generated terrain and atmosphere (perlin, other)
+     * Region Grid			Perlin generated biomes based on planet coordinates and data
+     * Overland Map			Perlin generated sub-biomes based on Region biome values
+     * Local Map			Mob-level area within the overland map
+     *
      */
+    /*
     qDebug() << "Hello World.";
 
     // The possible ground cover types
@@ -48,6 +66,7 @@ int main(int argc, char *argv[])
     zone[4][5] = Grass;
     zone[5][3] = Grass;
     zone[5][4] = Grass;
+    */
 
     // get the current screen resolution
     int screenWidth;
@@ -73,14 +92,24 @@ int main(int argc, char *argv[])
     qDebug() << "Character size: " << QString::number(charWidth) << " x "
              << QString::number(charHeight);
 
-    // draw the zone
-    TCODConsole::initRoot(10, 10, "RL Tcod", false);
+    // draw the screen
+    // 106:60 ~ 16:9 (widescreen)
+    int viewWidth = 106;
+    int viewHeight = 60;
+    TCODConsole::initRoot(viewWidth, viewHeight, "RL Tcod", false);
+
+    // test cloud noise
+    IntergalacticCloud cloud;
+    cloud.initCloudMap();
+
+
     while (!TCODConsole::isWindowClosed()) {
 
         TCOD_key_t key;
         TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS, &key, NULL);
 
         TCODConsole::root->clear();
+        /*
         for (int x = 0; x < ZONE_SIZE; ++x) {
             for (int y = 0; y < ZONE_SIZE; ++y) {
 
@@ -109,6 +138,7 @@ int main(int argc, char *argv[])
 
          // draw outside the zone
         TCODConsole::root->putChar(5, 11, '!');
+        */
 
 /*
     int insideChar = TCODConsole::root->getChar(5, 5);
@@ -119,15 +149,36 @@ int main(int argc, char *argv[])
 
         // Add the tree file
         //TCODConsole *treeImage = new TCODConsole("tree.apf");
+        /*
         TCODConsole *treeImage = new TCODConsole(5,5);
         treeImage->clear();
         treeImage->loadApf("tree.apf");
         TCODConsole::blit(treeImage, 0, 0, 5, 5, TCODConsole::root, 0, 0, 1.0f,
                           1.0f);
+       */
 
+        // Draw part of cloud map
+        for (int x = 0; x < 100; ++x) {
+            for (int y = 0; y < 100; ++y) {
+                int cellDensity = cloud.cloudMap[x][y].GalaxyDensity;
+                int colorVal = qRound(255.0f * ((float)cellDensity / 10.0f));
 
+                // color correction
+                if (colorVal >= 255) { colorVal = 255; }
+                else if (colorVal <= 0) { colorVal = 0; }
+
+                TCODColor cellColor(colorVal, colorVal, colorVal);
+                char cloudChar = ' ';
+                TCODConsole::root->putChar(y, x, cloudChar);
+                TCODConsole::root->setCharBackground(y, x, cellColor);
+                TCODConsole::root->setCharForeground(y, x, cellColor);
+            }
+        }
+
+        // finalize drawing
         TCODConsole::flush();
     }
+
     return 0;
 
 }
