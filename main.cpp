@@ -3,9 +3,10 @@
 #include <QString>
 #include <QDebug>
 #include <QList>
-
-
 #include "intergalacticcloud.h"
+
+void logOnce(QString msg);
+void importApf(QString filename, int x, int y);
 
 int main(int argc, char *argv[])
 {
@@ -104,6 +105,7 @@ int main(int argc, char *argv[])
 
 
     while (!TCODConsole::isWindowClosed()) {
+        QString msg;
 
         TCOD_key_t key;
         TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS, &key, NULL);
@@ -140,12 +142,7 @@ int main(int argc, char *argv[])
         TCODConsole::root->putChar(5, 11, '!');
         */
 
-/*
-    int insideChar = TCODConsole::root->getChar(5, 5);
-    qDebug() << "inside char: " << (char)insideChar;
-    int outsideChar = TCODConsole::root->getChar(5, 11);
-    qDebug() << "outside char: " << QString::number(outsideChar);
-*/
+        importApf("tree.apf", 7, 2);
 
         // Add the tree file
         //TCODConsole *treeImage = new TCODConsole("tree.apf");
@@ -175,6 +172,15 @@ int main(int argc, char *argv[])
             }
         }
 
+        /*
+        int posx = 0;
+        int posy = 0;
+
+        // log the magenta color:
+        int queryChar = TCODConsole::root->getChar(posx,posy);
+        logOnce(msg);
+        */
+
         // finalize drawing
         TCODConsole::flush();
     }
@@ -182,4 +188,36 @@ int main(int argc, char *argv[])
     return 0;
 
 }
+
+/**
+ * @brief importApf
+ * Imports an apf file to the main console at x and y.
+ * Clears any transparent tiles on the imported image.
+ *
+ * @param filename The file path of the saved apf file
+ * @param x
+ * @param y
+ */
+void importApf(QString filename, int x, int y)
+{
+    TCODConsole *importBuffer = new TCODConsole(1,1);
+    importBuffer->clear();
+    importBuffer->loadApf(filename.toLocal8Bit());
+    const int SOURCE_SIZE = 0;
+    const int SOURCE_ORIGIN = 0;
+    TCODColor keyBackgroundColor(300.0f, 1.0f, 1.0f);
+    importBuffer->setKeyColor(keyBackgroundColor);
+    TCODConsole::blit(importBuffer,
+                      SOURCE_ORIGIN, SOURCE_ORIGIN,
+                      SOURCE_SIZE, SOURCE_SIZE,
+                      TCODConsole::root, x, y);
+}
+
+bool hasLogged = false;
+void logOnce(QString msg) {
+    if (hasLogged) { return; }
+    qDebug() << msg;
+    hasLogged = true;
+}
+
 
