@@ -15,11 +15,52 @@
 class IntergalacticCloud
 {
 public:
-    QList<QList<GalacticCluster>> cloudMap;
+    const int CLOUD_DIAMETER = 100;
+    QList<QList<GalacticCluster>> CloudMap;
 
     IntergalacticCloud();
     void initCloudMap();
 
+    /**
+     * @brief findRecommendedCluster
+     *
+     * @note If the CloudMap has not yet been defined, this will call
+     * initCloudMap();
+     *
+     * @return finds the first most dense cluster it can. If for some reason
+     * it cannot find a suitable cluster, it will return the center-most one.
+     */
+    GalacticCluster &findRecommendedCluster();
+
+    /**
+     * @brief drawCloudMap
+     * Draws the cloud map to the root window.
+     *
+     * @note Must call TCODConsole::flush after to finalize drawing.
+     * Best if called within a while loop that makes sure the window is not
+     * closed.
+     *
+     * @param offsetX
+     * @param offsetY
+     */
+    void drawCloudMap(int offsetX = 0, int offsetY = 0);
+
+    /**
+     * @brief isNull
+     *
+     * @return Returns true if the CloudMap has not yet been defined.
+     */
+    bool isNull();
+
+    /**
+     * @brief distance
+     *
+     * @param x1
+     * @param x2
+     * @param y1
+     * @param y2
+     * @return The distance between points (x1, y1) and (x2, y2).
+     */
     static float distance(float x1, float x2, float y1, float y2);
 
     /**

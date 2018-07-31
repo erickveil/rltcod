@@ -10,6 +10,9 @@ void importApf(QString filename, int x, int y);
 
 int main(int argc, char *argv[])
 {
+    Q_UNUSED(argc);
+    Q_UNUSED(argv);
+
     /* NOTES:
      * So far, each "tile" is:
      * A data indicator referenced by the map (enum)
@@ -102,6 +105,9 @@ int main(int argc, char *argv[])
     // test cloud noise
     IntergalacticCloud cloud;
     cloud.initCloudMap();
+    GalacticCluster startingCluster = cloud.findRecommendedCluster();
+
+
 
 
     while (!TCODConsole::isWindowClosed()) {
@@ -142,7 +148,7 @@ int main(int argc, char *argv[])
         TCODConsole::root->putChar(5, 11, '!');
         */
 
-        importApf("tree.apf", 7, 2);
+        //importApf("tree.apf", 7, 2);
 
         // Add the tree file
         //TCODConsole *treeImage = new TCODConsole("tree.apf");
@@ -155,22 +161,8 @@ int main(int argc, char *argv[])
        */
 
         // Draw part of cloud map
-        for (int x = 0; x < 100; ++x) {
-            for (int y = 0; y < 100; ++y) {
-                int cellDensity = cloud.cloudMap[x][y].GalaxyDensity;
-                int colorVal = qRound(255.0f * ((float)cellDensity / 10.0f));
+        cloud.drawCloudMap(25, 25);
 
-                // color correction
-                if (colorVal >= 255) { colorVal = 255; }
-                else if (colorVal <= 0) { colorVal = 0; }
-
-                TCODColor cellColor(colorVal, colorVal, colorVal);
-                char cloudChar = ' ';
-                TCODConsole::root->putChar(y, x, cloudChar);
-                TCODConsole::root->setCharBackground(y, x, cellColor);
-                TCODConsole::root->setCharForeground(y, x, cellColor);
-            }
-        }
 
         /*
         int posx = 0;
