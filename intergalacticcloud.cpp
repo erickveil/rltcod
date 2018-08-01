@@ -21,7 +21,7 @@ void IntergalacticCloud::initCloudMap()
     }
 
     // populate with perlin noise
-    TCODNoise *noise2d = new TCODNoise(2);
+    TCODNoise noise2d(2);
 
     /* Define frequency of clouds
      * 0.3 is a decent small cloud at this resolution (100x100)
@@ -39,7 +39,7 @@ void IntergalacticCloud::initCloudMap()
     for (int x = 0; x < CLOUD_DIAMETER; ++x) {
         for (int y = 0; y < CLOUD_DIAMETER; ++y) {
             float coordinates[2] = {(float)x * splitter, (float)y * splitter};
-            float tileDensity = noise2d->get(coordinates, TCOD_NOISE_PERLIN);
+            float tileDensity = noise2d.get(coordinates, TCOD_NOISE_PERLIN);
             CloudMap[x][y].GalaxyDensity = (tileDensity + cloudDensity) / 2;
         }
     }
