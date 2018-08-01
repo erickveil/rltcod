@@ -30,11 +30,17 @@ void IntergalacticCloud::initCloudMap()
      */
     float splitter = 0.11f;
 
+    /* Defines the overall density of the cloud. The highter the number, the
+     * farther the minimum value is taken away from 0.0 at the center of the
+     * cloud, leaving less void.
+     */
+    float cloudDensity = 0.55f;
+
     for (int x = 0; x < CLOUD_DIAMETER; ++x) {
         for (int y = 0; y < CLOUD_DIAMETER; ++y) {
             float coordinates[2] = {(float)x * splitter, (float)y * splitter};
             float tileDensity = noise2d->get(coordinates, TCOD_NOISE_PERLIN);
-            CloudMap[x][y].GalaxyDensity = qRound(tileDensity * 10.0f) + 4;
+            CloudMap[x][y].GalaxyDensity = (tileDensity + cloudDensity) / 2;
         }
     }
 
@@ -43,13 +49,12 @@ void IntergalacticCloud::initCloudMap()
     int stopRadius = 50;
     float center = (float)CLOUD_DIAMETER * 0.5f;
     float origin[2] = {center, center};
-    QString d;
     for (int x = 0; x < CLOUD_DIAMETER; ++x) {
         for (int y = 0; y < CLOUD_DIAMETER; ++y) {
             float dist = distance(origin[0], x, origin[1], y);
-            int baseDensity = CloudMap[x][y].GalaxyDensity;
+            float baseDensity = CloudMap[x][y].GalaxyDensity;
             CloudMap[x][y].GalaxyDensity = radialFade(
-                        dist, startRadius, stopRadius, baseDensity, 5.0f);
+                        dist, startRadius, stopRadius, baseDensity, 0.5f);
 
         }
     }
@@ -59,7 +64,7 @@ GalacticCluster &IntergalacticCloud::findRecommendedCluster()
 {
     if (isNull()) { initCloudMap(); }
 
-    for (int targetDensity = 9; targetDensity > 0; --targetDensity) {
+    for (int targetDensity = 0.9; targetDensity > 0; targetDensity -= 0.1) {
         for (int x = 0; x < CLOUD_DIAMETER; ++x) {
             for (int y = 0; y < CLOUD_DIAMETER; ++y) {
                 auto cluster = CloudMap[x][y];
@@ -81,8 +86,8 @@ void IntergalacticCloud::drawCloudMap(int offsetX, int offsetY)
         for (int y = 0; y < CLOUD_DIAMETER; ++y) {
             int refY = y + offsetY;
             if (refY > CLOUD_DIAMETER - 1) { break; }
-            int cellDensity = CloudMap[refX][refY].GalaxyDensity;
-            int colorVal = qRound(255.0f * ((float)cellDensity / 10.0f));
+            float cellDensity = CloudMap[refX][refY].GalaxyDensity;
+            int colorVal = qRound(255.0f * cellDensity);
 
             // color correction
             if (colorVal >= 255) { colorVal = 255; }
@@ -111,13 +116,13 @@ float IntergalacticCloud::distance(float x1, float x2, float y1, float y2)
 }
 
 float IntergalacticCloud::radialFade(
-        float dist, int startRadius, int stopRadius, int baseDensity,
+        float dist, int startRadius, int stopRadius, float baseDensity,
         float modifier)
 {
     int range = stopRadius - startRadius;
     float pctDist = (dist - startRadius) / range;
 
-    int density = baseDensity - (qRound(pctDist * modifier));
+    float density = baseDensity - (pctDist * modifier);
     if (density <= 0) { density = 0; }
 
     if (dist >= stopRadius-1) { density = 0; }

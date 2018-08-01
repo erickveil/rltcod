@@ -5,7 +5,7 @@
 class GalacticCluster
 {
 public:
-    int GalaxyDensity;
+    float GalaxyDensity;
     GalacticCluster();
 };
 

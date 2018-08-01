@@ -161,7 +161,7 @@ int main(int argc, char *argv[])
        */
 
         // Draw part of cloud map
-        cloud.drawCloudMap(25, 25);
+        cloud.drawCloudMap(0, 0);
 
 
         /*

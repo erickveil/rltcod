@@ -70,13 +70,13 @@ public:
      * @param startRadius Start the gradient this distance from center
      * @param stopRadius Stop the gradient this distance from center
      * @param baseDensity The starting densidy of the area (0-10).
-     * @param modifier Consider 5.0f the median. Go higher, and the center of the
+     * @param modifier Consider 0.5f the median. Go higher, and the center of the
      * gradient moves closer to the startRadius, go lower, and the center moves
      * closer to the stopRadius
      * @return
      */
     static float radialFade(float dist, int startRadius, int stopRadius,
-                            int baseDensity, float modifier);
+                            float baseDensity, float modifier);
 };
 
 #endif // INTERGALACTICCLOUD_H
