@@ -5,6 +5,7 @@
 #include <QList>
 #include "intergalacticcloud.h"
 #include "inputcontrols.h"
+#include "messagebox.h"
 
 void logOnce(QString msg);
 void importApf(QString filename, int x, int y);
@@ -99,8 +100,8 @@ int main(int argc, char *argv[])
 
     // draw the screen
     // 106:60 ~ 16:9 (widescreen)
-    int viewWidth = 16;
-    int viewHeight = 9;
+    int viewWidth = 106;
+    int viewHeight = 60;
     TCODConsole::initRoot(viewWidth, viewHeight, "RL Tcod", false);
 
     // test cloud noise
@@ -108,12 +109,20 @@ int main(int argc, char *argv[])
     cloud.initCloudMap();
     GalacticCluster startingCluster = cloud.findRecommendedCluster();
     InputControls inputControl;
+    MessageBox testBox;
+    testBox.show();
+    testBox.message = "This is a test message. It is a really long message, so "
+                      "I hope it all fits in the text box.";
 
 
     while (!TCODConsole::isWindowClosed()) {
         QString msg;
 
         TCODConsole::root->clear();
+
+        cloud.drawCloudMap(0, 0);
+        testBox.drawBox();
+
         /*
         for (int x = 0; x < ZONE_SIZE; ++x) {
             for (int y = 0; y < ZONE_SIZE; ++y) {
@@ -157,8 +166,6 @@ int main(int argc, char *argv[])
                           1.0f);
        */
 
-        // Draw part of cloud map
-        cloud.drawCloudMap(0, 0);
 
 
         /*
