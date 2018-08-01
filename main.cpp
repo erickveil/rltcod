@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <QList>
 #include "intergalacticcloud.h"
+#include "inputcontrols.h"
 
 void logOnce(QString msg);
 void importApf(QString filename, int x, int y);
@@ -98,23 +99,19 @@ int main(int argc, char *argv[])
 
     // draw the screen
     // 106:60 ~ 16:9 (widescreen)
-    int viewWidth = 106;
-    int viewHeight = 60;
+    int viewWidth = 16;
+    int viewHeight = 9;
     TCODConsole::initRoot(viewWidth, viewHeight, "RL Tcod", false);
 
     // test cloud noise
     IntergalacticCloud cloud;
     cloud.initCloudMap();
     GalacticCluster startingCluster = cloud.findRecommendedCluster();
-
-
+    InputControls inputControl;
 
 
     while (!TCODConsole::isWindowClosed()) {
         QString msg;
-
-        TCOD_key_t key;
-        TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS, &key, NULL);
 
         TCODConsole::root->clear();
         /*
@@ -175,6 +172,7 @@ int main(int argc, char *argv[])
 
         // finalize drawing
         TCODConsole::flush();
+        inputControl.captureInput();
     }
 
     return 0;

@@ -10,7 +10,8 @@ TEMPLATE = app
 
 SOURCES += main.cpp \
     intergalacticcloud.cpp \
-    galacticcluster.cpp
+    galacticcluster.cpp \
+    inputcontrols.cpp
 
 HEADERS += \
     include/bresenham.h \
@@ -61,7 +62,8 @@ HEADERS += \
     include/zip.h \
     include/zip.hpp \
     intergalacticcloud.h \
-    galacticcluster.h
+    galacticcluster.h \
+    inputcontrols.h
 
 DISTFILES += \
     terminal.png \
