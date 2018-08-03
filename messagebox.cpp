@@ -45,11 +45,113 @@ void MessageBox::drawBox()
         }
     }
     */
-    TCODConsole::root->setAlignment(TCOD_CENTER);
-    TCODConsole::root->setColorControl(TCOD_COLCTRL_1, TextColor, TextBack);
-    TCODConsole::root->printRect(posX, posY, maxWidth, maxHeight,
-                           "String with a %cred%c word.",
-                           TCOD_COLCTRL_1, TCOD_COLCTRL_STOP);
+    // Set Position
+    if (position == POS_TOP_LEFT) {
+        posX = margin;
+        posY = margin;
+    }
+    else if (position == POS_TOP_CENTER) {
+        posX = qRound(((float)viewWidth / 2.0f) - ((float)maxWidth / 2.0f));
+        posY = margin;
+    }
+    else if (position == POS_TOP_RIGHT) {
+        posX = viewWidth - maxWidth - margin;
+        posY = margin;
+    }
+    else if (position == POS_BOTTOM_LEFT) {
+        posX = margin;
+        posY = viewHeight - maxHeight - margin;
+    }
+    else if (position == POS_BOTTOM_CENTER) {
+        posX = qRound(((float)viewWidth / 2.0f) - ((float)maxWidth / 2.0f));
+        posY = viewHeight - maxHeight - margin;
+    }
+    else if (position == POS_BOTTOM_RIGHT) {
+        posX = viewWidth - maxWidth - margin;
+        posY = viewHeight - maxHeight - margin;
+    }
+    else if (position == POS_MIDDLE_LEFT) {
+        posX = margin;
+        posY = qRound(((float)viewHeight / 2.0f) - ((float)maxHeight / 2.0f));
+    }
+    else if (position == POS_MIDDLE_CENTER) {
+        posX = qRound(((float)viewWidth / 2.0f) - ((float)maxWidth / 2.0f));
+        posY = qRound(((float)viewHeight / 2.0f) - ((float)maxHeight / 2.0f));
+    }
+    else if (position == POS_MIDDLE_RIGHT) {
+        posX = viewWidth - maxWidth - margin;
+        posY = qRound(((float)viewHeight / 2.0f) - ((float)maxHeight / 2.0f));
+    }
+
+    // Draw Box
+    for (int x = 0; x < maxWidth + 1; ++x) {
+        for (int y = 0; y < maxHeight; ++y) {
+            bool isLeft = (x == 0);
+            bool isRight = (x == maxWidth);
+            bool isTop = (y == 0);
+            bool isBottom = (y == maxHeight - 1);
+            bool isTL = (isLeft && isTop);
+            bool isTR = (isRight && isTop);
+            bool isBL = (isLeft && isBottom);
+            bool isBR = (isRight && isBottom);
+            int boxPosX = x + posX;
+            int boxPosY = y + posY;
+            if (isTL) {
+                TCODConsole::root->putCharEx(
+                            boxPosX, boxPosY,
+                            BorderTL, BorderColor, BorderBack );
+            }
+            else if (isTR) {
+                TCODConsole::root->putCharEx(
+                            boxPosX, boxPosY,
+                            BorderTR, BorderColor, BorderBack );
+            }
+            else if (isBL) {
+                TCODConsole::root->putCharEx(
+                            boxPosX, boxPosY,
+                            BorderBL, BorderColor, BorderBack );
+            }
+            else if (isBR) {
+                TCODConsole::root->putCharEx(
+                            boxPosX, boxPosY,
+                            BorderBR, BorderColor, BorderBack );
+            }
+            else if (isTop || isBottom) {
+                TCODConsole::root->putCharEx(
+                            boxPosX, boxPosY,
+                            BorderHoriz, BorderColor, BorderBack );
+            }
+            else if (isLeft || isRight) {
+                TCODConsole::root->putCharEx(
+                            boxPosX, boxPosY,
+                            BorderVert, BorderColor, BorderBack );
+            }
+            else {
+                TCODConsole::root->putCharEx(
+                            boxPosX, boxPosY,
+                            FillChar, FillColor, FillBack);
+            }
+        }
+    }
+
+    // Draw Text Area
+    TCODConsole::setColorControl(
+                TCOD_COLCTRL_1, TextColor, TextBack);
+    QString printMsg = QString("%c") + message + "%c";
+    int center = qFloor((float)maxWidth / 2.0f);
+    int border = 1;
+    int textAreaPosX = posX + center;
+    int textAreaPosY = posY + border + padding;
+    int textAreaMaxW = maxWidth - 2 - padding;
+    int textAreaMaxH = maxHeight - 2 - (padding * 2);
+    TCODConsole::root->printRectEx(
+                textAreaPosX, textAreaPosY,
+                textAreaMaxW, textAreaMaxH,
+                TCOD_BKGND_SET,
+                TCOD_CENTER,
+                printMsg.toLocal8Bit(),
+                TCOD_COLCTRL_1,
+                TCOD_COLCTRL_STOP);
 
 
 

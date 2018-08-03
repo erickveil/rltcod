@@ -109,19 +109,21 @@ int main(int argc, char *argv[])
     cloud.initCloudMap();
     GalacticCluster startingCluster = cloud.findRecommendedCluster();
     InputControls inputControl;
+
     MessageBox testBox;
     testBox.show();
     testBox.message = "This is a test message. It is a really long message, so "
-                      "I hope it all fits in the text box.";
+                      "I hope it all fits in the text box. I don't think it's "
+                      "long enough so I'm going to add some more.";
 
 
     while (!TCODConsole::isWindowClosed()) {
-        QString msg;
 
         TCODConsole::root->clear();
 
         cloud.drawCloudMap(0, 0);
-        //testBox.drawBox();
+        testBox.drawBox();
+
 
         /*
         for (int x = 0; x < ZONE_SIZE; ++x) {
