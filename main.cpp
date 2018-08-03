@@ -121,7 +121,7 @@ int main(int argc, char *argv[])
         TCODConsole::root->clear();
 
         cloud.drawCloudMap(0, 0);
-        testBox.drawBox();
+        //testBox.drawBox();
 
         /*
         for (int x = 0; x < ZONE_SIZE; ++x) {
