@@ -186,10 +186,13 @@ void MessageBox::_drawContinueButton()
 QString MessageBox::_getContinuingText()
 {
     QString lastLine = _getLastLineText();
-    return "test";
-    // iterate last line and message and find a match to figure out where we
-    // left off
+    QString originalMsg = Message;
 
+    int strPos = originalMsg.indexOf(lastLine);
+    strPos += lastLine.size();
+
+    QString newMsg = originalMsg.mid(strPos);
+    return newMsg;
 }
 
 QString MessageBox::_getLastLineText()
@@ -205,6 +208,7 @@ QString MessageBox::_getLastLineText()
         char c = TCODConsole::root->getChar(x, y);
         lastLine.append(c);
     }
+    lastLine = lastLine.trimmed();
 
     qDebug() << lastLine;
     return lastLine;
