@@ -9,93 +9,60 @@ void MessageBox::drawBox()
 {
     if (!isDisplayed) { return; }
 
-    /*
-    _calcDimensions();
-    _calcPosition();
+    int viewWidth = TCODConsole::root->getWidth();
+    int viewHeight = TCODConsole::root->getHeight();
 
-    int textAreaXStart = posX + 1 + padding;
-    int textAreaXEnd = (posX + dimX) - 1 - padding;
-    int textAreaYStart = posY + 1 + padding;
-    int textAreaYEnd = (posY + dimY) - 1 - padding;
-
-    char printChar;
-    for (int x = 0; x < dimX; ++x) {
-        int drawPosX = posX + x;
-        for (int y = 0; y < dimY; ++y) {
-            int drawPosY = posY + y;
-            bool isTopLeftCorner = (x == 0 && y == 0);
-            bool isTopRightCorner = (x == dimX - 1 && y == 0);
-            bool isBottomLeftCorner = (x == 0 && y == dimY - 1);
-            bool isBottomRightCorner (x == dimX - 1 && y == dimY - 1);
-            bool isTopBorder = (y == 0);
-            bool isBottomBorder = (y == dimY - 1);
-            bool isLeftBorder = (x == 0);
-            bool isRightBorder = (x == dimX - 1);
-            bool isTopPadding = (y > posY) && (y <= posY + padding);
-            bool isBottomPadding =
-                    (y < posY + dimX - 1) && (y > posY + dimX - 1 - padding);
-            bool isLeftPadding = (x > posX + 1) && (x < posX + 1 + padding);
-            bool isRightPadding;
-            bool isPadding = isTopPadding || isBottomPadding || isLeftPadding
-                    || isRightPadding;
-            if (isTopLeftCorner) { printChar = BorderTL; }
-
-
-            TCODConsole::root->putCharEx(drawPosX, drawPosY, BorderTL, BorderColor, BorderBack);
-        }
+    // Set Position of box
+    if (Postion == POS_TOP_LEFT) {
+        PosX = Margin;
+        PosY = Margin;
     }
-    */
-    // Set Position
-    if (position == POS_TOP_LEFT) {
-        posX = margin;
-        posY = margin;
+    else if (Postion == POS_TOP_CENTER) {
+        PosX = qRound(((float)viewWidth / 2.0f) - ((float)MaxWidth / 2.0f));
+        PosY = Margin;
     }
-    else if (position == POS_TOP_CENTER) {
-        posX = qRound(((float)viewWidth / 2.0f) - ((float)maxWidth / 2.0f));
-        posY = margin;
+    else if (Postion == POS_TOP_RIGHT) {
+        PosX = viewWidth - MaxWidth - Margin;
+        PosY = Margin;
     }
-    else if (position == POS_TOP_RIGHT) {
-        posX = viewWidth - maxWidth - margin;
-        posY = margin;
+    else if (Postion == POS_BOTTOM_LEFT) {
+        PosX = Margin;
+        PosY = viewHeight - MaxHeight - Margin;
     }
-    else if (position == POS_BOTTOM_LEFT) {
-        posX = margin;
-        posY = viewHeight - maxHeight - margin;
+    else if (Postion == POS_BOTTOM_CENTER) {
+        PosX = qRound(((float)viewWidth / 2.0f) - ((float)MaxWidth / 2.0f));
+        PosY = viewHeight - MaxHeight - Margin;
     }
-    else if (position == POS_BOTTOM_CENTER) {
-        posX = qRound(((float)viewWidth / 2.0f) - ((float)maxWidth / 2.0f));
-        posY = viewHeight - maxHeight - margin;
+    else if (Postion == POS_BOTTOM_RIGHT) {
+        PosX = viewWidth - MaxWidth - Margin;
+        PosY = viewHeight - MaxHeight - Margin;
     }
-    else if (position == POS_BOTTOM_RIGHT) {
-        posX = viewWidth - maxWidth - margin;
-        posY = viewHeight - maxHeight - margin;
+    else if (Postion == POS_MIDDLE_LEFT) {
+        PosX = Margin;
+        PosY = qRound(((float)viewHeight / 2.0f) - ((float)MaxHeight / 2.0f));
     }
-    else if (position == POS_MIDDLE_LEFT) {
-        posX = margin;
-        posY = qRound(((float)viewHeight / 2.0f) - ((float)maxHeight / 2.0f));
+    else if (Postion == POS_MIDDLE_CENTER) {
+        PosX = qRound(((float)viewWidth / 2.0f) - ((float)MaxWidth / 2.0f));
+        PosY = qRound(((float)viewHeight / 2.0f) - ((float)MaxHeight / 2.0f));
     }
-    else if (position == POS_MIDDLE_CENTER) {
-        posX = qRound(((float)viewWidth / 2.0f) - ((float)maxWidth / 2.0f));
-        posY = qRound(((float)viewHeight / 2.0f) - ((float)maxHeight / 2.0f));
-    }
-    else if (position == POS_MIDDLE_RIGHT) {
-        posX = viewWidth - maxWidth - margin;
-        posY = qRound(((float)viewHeight / 2.0f) - ((float)maxHeight / 2.0f));
+    else if (Postion == POS_MIDDLE_RIGHT) {
+        PosX = viewWidth - MaxWidth - Margin;
+        PosY = qRound(((float)viewHeight / 2.0f) - ((float)MaxHeight / 2.0f));
     }
 
     // Draw Box
-    for (int x = 0; x < maxWidth + 1; ++x) {
-        for (int y = 0; y < maxHeight; ++y) {
+    for (int x = 0; x < MaxWidth + 1; ++x) {
+        for (int y = 0; y < MaxHeight; ++y) {
             bool isLeft = (x == 0);
-            bool isRight = (x == maxWidth);
+            bool isRight = (x == MaxWidth);
             bool isTop = (y == 0);
-            bool isBottom = (y == maxHeight - 1);
+            bool isBottom = (y == MaxHeight - 1);
             bool isTL = (isLeft && isTop);
             bool isTR = (isRight && isTop);
             bool isBL = (isLeft && isBottom);
             bool isBR = (isRight && isBottom);
-            int boxPosX = x + posX;
-            int boxPosY = y + posY;
+            int boxPosX = x + PosX;
+            int boxPosY = y + PosY;
             if (isTL) {
                 TCODConsole::root->putCharEx(
                             boxPosX, boxPosY,
@@ -137,13 +104,13 @@ void MessageBox::drawBox()
     // Draw Text Area
     TCODConsole::setColorControl(
                 TCOD_COLCTRL_1, TextColor, TextBack);
-    QString printMsg = QString("%c") + message + "%c";
-    int center = qFloor((float)maxWidth / 2.0f);
+    QString printMsg = QString("%c") + Message + "%c";
+    int center = qFloor((float)MaxWidth / 2.0f);
     int border = 1;
-    int textAreaPosX = posX + center;
-    int textAreaPosY = posY + border + padding;
-    int textAreaMaxW = maxWidth - 2 - padding;
-    int textAreaMaxH = maxHeight - 2 - (padding * 2);
+    int textAreaPosX = PosX + center;
+    int textAreaPosY = PosY + border + Padding;
+    int textAreaMaxW = MaxWidth - 2 - Padding;
+    int textAreaMaxH = MaxHeight - 2 - (Padding * 2);
     TCODConsole::root->printRectEx(
                 textAreaPosX, textAreaPosY,
                 textAreaMaxW, textAreaMaxH,
@@ -153,7 +120,8 @@ void MessageBox::drawBox()
                 TCOD_COLCTRL_1,
                 TCOD_COLCTRL_STOP);
 
-
+    // Continue button
+    if (_isContinued()) { _drawContinueButton(); }
 
 }
 
@@ -167,89 +135,25 @@ void MessageBox::hide()
     isDisplayed = false;
 }
 
-void MessageBox::_calcDimensions()
+void MessageBox::continueBox()
 {
-    // set box width
-    int textLength = message.size();
-    int textAreaWidth = maxWidth - (padding * 2) - 2;
-    int boxWidth = (textLength > textAreaWidth)
-            ? maxWidth
-            : textLength + (padding * 2) + 2;
-
-    // cut the message into lines
-    QStringList lineList = _splitMessageIntoLines();
-
-    // set box height
-    int textAreaHeight = maxHeight - (padding * 2) - 2;
-    int boxHeight = (lineList.size() < textAreaHeight)
-            ? lineList.size() + (padding * 2) + 2
-            : maxHeight;
-    dimX = boxWidth;
-    dimY = boxHeight;
+    if (!_isContinued()) { return; }
+    QString nextMessage = _getContinuingText();
+    Message = nextMessage;
 }
 
-void MessageBox::_calcPosition()
+bool MessageBox::isNull()
 {
-    int x = 0;
-    int y = 1;
-
-    _calcDimensions();
-    int width = dimX;
-    int height = dimY;
-    int pos[2];
-
-    switch(position) {
-    case POS_TOP_LEFT:
-        pos[x] = margin;
-        pos[y] = margin;
-        break;
-    case POS_TOP_CENTER:
-        pos[y] = margin;
-        pos[x] = (qRound((float)viewWidth / 2.0f)) - (qRound((float)width / 2.0f));
-        break;
-    case POS_TOP_RIGHT:
-        pos[y] = margin;
-        pos[x] = viewWidth - width - margin;
-        break;
-    case POS_MIDDLE_LEFT:
-        pos[x] = margin;
-        pos[y] = (qRound((float)viewHeight / 2.0f)) - (qRound((float)height / 2.0f));
-        break;
-    case POS_MIDDLE_CENTER:
-        pos[x] = (qRound((float)viewWidth / 2.0f)) - (qRound((float)width / 2.0f));
-        pos[y] = (qRound((float)viewHeight / 2.0f)) - (qRound((float)height / 2.0f));
-        break;
-    case POS_MIDDLE_RIGHT:
-        pos[x] = viewWidth - width - margin;
-        pos[y] = (qRound((float)viewHeight / 2.0f)) - (qRound((float)height / 2.0f));
-        break;
-    case POS_BOTTOM_LEFT:
-        pos[x] = margin;
-        pos[y] = viewHeight - height - margin;
-        break;
-    case POS_BOTTOM_CENTER:
-        pos[x] = (qRound((float)viewWidth / 2.0f)) - (qRound((float)width / 2.0f));
-        pos[y] = viewHeight - height - margin;
-        break;
-    case POS_BOTTOM_RIGHT:
-        pos[x] = viewWidth - width - margin;
-        pos[y] = viewHeight - height - margin;
-        break;
-    default:
-        pos[x] = margin;
-        pos[y] = margin;
-    }
-    posX = pos[x];
-    posY = pos[y];
+    return Message.isEmpty();
 }
 
 QStringList MessageBox::_splitMessageIntoLines()
 {
     QStringList lineList;
-    int textLength = message.size();
-    int textAreaWidth = maxWidth - (padding * 2) - 2;
+    int textLength = Message.size();
+    int textAreaWidth = MaxWidth - (Padding * 2) - 2;
     if(textLength > textAreaWidth) {
-        QStringList wordList = message.split(" ");
+        QStringList wordList = Message.split(" ");
         QString testLine;
         QString finalLine;
         for (int i = 0; i < wordList.size(); ++i) {
@@ -266,8 +170,60 @@ QStringList MessageBox::_splitMessageIntoLines()
         }
     }
     else {
-        lineList.append(message);
+        lineList.append(Message);
     }
     return lineList;
+}
+
+void MessageBox::_drawContinueButton()
+{
+    int buttonX = PosX + 1;
+    int buttonY = PosY + MaxHeight - 1;
+    TCODConsole::root->print(buttonX, buttonY, "[Space]");
+
+}
+
+QString MessageBox::_getContinuingText()
+{
+    QString lastLine = _getLastLineText();
+    return "test";
+    // iterate last line and message and find a match to figure out where we
+    // left off
+
+}
+
+QString MessageBox::_getLastLineText()
+{
+    int lineStartX = PosX + 1 + Padding;
+    int lineStartY = PosY + MaxHeight - 2 - Padding;
+    int textWidth = MaxWidth - 2 - (Padding * 2);
+
+    QString lastLine;
+    for (int i = 0; i < textWidth; ++i) {
+        int x = lineStartX + i;
+        int y = lineStartY;
+        char c = TCODConsole::root->getChar(x, y);
+        lastLine.append(c);
+    }
+
+    qDebug() << lastLine;
+    return lastLine;
+
+}
+
+bool MessageBox::_isContinued()
+{
+    int border = 1;
+    int textAreaPosX = PosX + border + Padding;
+    int textAreaPosY = PosY + border + Padding;
+    int textAreaMaxW = MaxWidth - 2 - Padding;
+    int textAreaMaxH = MaxHeight - 2 - (Padding * 2);
+
+    int lineHeight = TCODConsole::root->getHeightRect(
+                textAreaPosX, textAreaPosY,
+                textAreaMaxW, textAreaMaxH,
+                Message.toLocal8Bit());
+
+    return (lineHeight > textAreaMaxH);
 }
 

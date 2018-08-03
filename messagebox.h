@@ -4,6 +4,7 @@
 #include <QString>
 #include <QStringList>
 #include <QtMath>
+#include <QDebug>
 
 #include "libtcod.hpp"
 
@@ -31,33 +32,36 @@ public:
     TCODColor TextColor = TCODColor::white;
     TCODColor TextBack = TCODColor::black;
 
-    int margin = 3;
-    int padding = 1;
+    int Margin = 3;
+    int Padding = 1;
 
-    int maxHeight = 10;
-    int maxWidth = 40;
+    int MaxHeight = 10;
+    int MaxWidth = 40;
 
-    int viewWidth = 106;
-    int viewHeight = 60;
+    BoxPosition Postion = POS_MIDDLE_CENTER;
 
-    BoxPosition position = POS_MIDDLE_CENTER;
+    QString Message;
 
-    QString message;
+    int PosX = 10;
+    int PosY = 10;
 
-    int dimX = 30;
-    int dimY = 10;
-    int posX = 10;
-    int posY = 10;
+    bool IsShowAcceptButton = true;
+    bool IsShowCancelButton = false;
 
     MessageBox();
     void drawBox();
     void show();
     void hide();
+    void continueBox();
+    bool isNull();
+
 
 private:
-    void _calcDimensions();
-    void _calcPosition();
     QStringList _splitMessageIntoLines();
+    void _drawContinueButton();
+    QString _getContinuingText();
+    QString _getLastLineText();
+    bool _isContinued();
 };
 
 #endif // MESSAGEBOX_H

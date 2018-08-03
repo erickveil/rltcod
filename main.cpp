@@ -103,6 +103,7 @@ int main(int argc, char *argv[])
     int viewWidth = 106;
     int viewHeight = 60;
     TCODConsole::initRoot(viewWidth, viewHeight, "RL Tcod", false);
+    TCODConsole::root->setWindowTitle("RLTcod");
 
     // test cloud noise
     IntergalacticCloud cloud;
@@ -112,9 +113,17 @@ int main(int argc, char *argv[])
 
     MessageBox testBox;
     testBox.show();
-    testBox.message = "This is a test message. It is a really long message, so "
-                      "I hope it all fits in the text box. I don't think it's "
-                      "long enough so I'm going to add some more.";
+    testBox.Message =
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do "
+            "eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut "
+            "enim ad minim veniam, quis nostrud exercitation ullamco laboris "
+            "nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor "
+            "in reprehenderit in voluptate velit esse cillum dolore eu fugiat "
+            "nulla pariatur. Excepteur sint occaecat cupidatat non proident, "
+            "sunt in culpa qui officia deserunt mollit anim id est laborum.";
+    inputControl.setMessageBox(testBox);
+    inputControl.CurrentMode = InputControls::INPUT_MODE_MSGBOX;
+
 
 
     while (!TCODConsole::isWindowClosed()) {
