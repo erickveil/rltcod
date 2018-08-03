@@ -121,7 +121,13 @@ void MessageBox::drawBox()
                 TCOD_COLCTRL_STOP);
 
     // Continue button
-    if (_isContinued()) { _drawContinueButton(); }
+    if (isContinued()) { _drawContinueButton(); }
+
+    // Accept button
+    if (!isContinued()) { _drawAcceptButton(); }
+
+    // Cancel button
+    if (!isContinued() && IsCancelable) { _drawCancelButton(); }
 
 }
 
@@ -137,7 +143,7 @@ void MessageBox::hide()
 
 void MessageBox::continueBox()
 {
-    if (!_isContinued()) { return; }
+    if (!isContinued()) { return; }
     QString nextMessage = _getContinuingText();
     Message = nextMessage;
 }
@@ -183,6 +189,23 @@ void MessageBox::_drawContinueButton()
 
 }
 
+void MessageBox::_drawAcceptButton()
+{
+    int buttonX = PosX + MaxWidth - 1;
+    int buttonY = PosY + MaxHeight - 1;
+    TCODConsole::root->printEx(buttonX, buttonY, TCOD_BKGND_NONE, TCOD_RIGHT,
+                               "[Enter]");
+}
+
+void MessageBox::_drawCancelButton()
+{
+    int buttonX = PosX + MaxWidth - 8;
+    int buttonY = PosY + MaxHeight - 1;
+    TCODConsole::root->printEx(buttonX, buttonY, TCOD_BKGND_NONE, TCOD_RIGHT,
+                               "[Esc]");
+
+}
+
 QString MessageBox::_getContinuingText()
 {
     QString lastLine = _getLastLineText();
@@ -210,12 +233,12 @@ QString MessageBox::_getLastLineText()
     }
     lastLine = lastLine.trimmed();
 
-    qDebug() << lastLine;
+    //qDebug() << lastLine;
     return lastLine;
 
 }
 
-bool MessageBox::_isContinued()
+bool MessageBox::isContinued()
 {
     int border = 1;
     int textAreaPosX = PosX + border + Padding;
@@ -231,3 +254,14 @@ bool MessageBox::_isContinued()
     return (lineHeight > textAreaMaxH);
 }
 
+void MessageBox::setCallback(std::function<void()> callback)
+{
+    _callback = callback;
+    IsCallbackSet = true;
+}
+
+void MessageBox::runCallback()
+{
+    if (!IsCallbackSet) { return; }
+    _callback();
+}

@@ -42,11 +42,27 @@ void InputControls::_runMsgBoxInputMode()
     TCOD_event_t inputEvent =
             TCODSystem::checkForEvent(TCOD_EVENT_ANY, &key, &mouse);
     char continueKey = ' ';
+    TCOD_keycode_t acceptKey = TCODK_ENTER;
+    TCOD_keycode_t cancelKey = TCODK_ESCAPE;
 
     if (inputEvent == TCOD_EVENT_KEY_PRESS) {
         if (!_validateMessageBox()) { return; }
 
         if (key.c == continueKey) { _currentMessageBox->continueBox(); }
+        if (key.vk == acceptKey
+                && !_currentMessageBox->isContinued()) {
+            _currentMessageBox->hide();
+            CurrentMode = INPUT_MODE_STANDARD;
+            if (_currentMessageBox->IsCallbackSet) {
+                _currentMessageBox->runCallback();
+            }
+        }
+        if (key.vk == cancelKey
+                && _currentMessageBox->IsCancelable
+                && !_currentMessageBox->isContinued()) {
+            _currentMessageBox->hide();
+            CurrentMode = INPUT_MODE_STANDARD;
+        }
     }
 }
 
