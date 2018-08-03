@@ -12,10 +12,8 @@ void InputControls::captureInput()
 
 }
 
-void InputControls::setMessageBox(MessageBox &msgBox)
+void InputControls::setMessageBox(MessageBox *msgBox)
 {
-    // TODO: 1. I suspect that this reference is copied by value here.
-    // How to prove that?
     _currentMessageBox = msgBox;
 }
 
@@ -48,7 +46,7 @@ void InputControls::_runMsgBoxInputMode()
     if (inputEvent == TCOD_EVENT_KEY_PRESS) {
         if (!_validateMessageBox()) { return; }
 
-        if (key.c == continueKey) { _currentMessageBox.continueBox(); }
+        if (key.c == continueKey) { _currentMessageBox->continueBox(); }
     }
 }
 
@@ -70,7 +68,7 @@ void InputControls::_runUnmodifiedKeyPress(TCOD_key_t &key, TCOD_mouse_t &mouse)
 
 bool InputControls::_validateMessageBox()
 {
-    if (_currentMessageBox.isNull()) {
+    if (_currentMessageBox->isNull()) {
         qWarning() << "No message box supplied in Message Box Input mode.";
         return false;
     }

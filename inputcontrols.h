@@ -11,7 +11,7 @@
 class InputControls
 {
     bool _isShift = false;
-    MessageBox _currentMessageBox;
+    MessageBox *_currentMessageBox;
 
 public:
     enum InputMode { INPUT_MODE_STANDARD, INPUT_MODE_MSGBOX };
@@ -33,7 +33,7 @@ public:
      * TCODConsole::flush call.
      */
     void captureInput();
-    void setMessageBox(MessageBox &msgBox);
+    void setMessageBox(MessageBox *msgBox);
 
 private:
     void _runStandardInputMode();

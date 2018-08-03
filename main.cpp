@@ -121,7 +121,7 @@ int main(int argc, char *argv[])
             "in reprehenderit in voluptate velit esse cillum dolore eu fugiat "
             "nulla pariatur. Excepteur sint occaecat cupidatat non proident, "
             "sunt in culpa qui officia deserunt mollit anim id est laborum.";
-    inputControl.setMessageBox(testBox);
+    inputControl.setMessageBox(&testBox);
     inputControl.CurrentMode = InputControls::INPUT_MODE_MSGBOX;
 
 
